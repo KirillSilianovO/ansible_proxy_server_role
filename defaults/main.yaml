@@ -1,1 +1,10 @@
 ---
+
+proxy_server_app_dir: "{{ apps_root_dir }}/proxy_server"
+proxy_server_config_file: "{{ proxy_server_app_dir }}/squid.conf"
+proxy_server_pass_file: "{{ proxy_server_app_dir }}/passwd"
+
+proxy_server_app_version: "{{ proxy_server_version | default('latest') }}"
+proxy_server_image: "kirillsilianov/proxy_server:{{ proxy_server_app_version }}"
+
+proxy_server_expose_port: "{{ proxy_server_port | default('8080') }}"

@@ -1,7 +1,9 @@
+---
+
 galaxy_info:
   author: Kirill Silianov
-  description: Role Description
-  company: your company (optional)
+  description: Ansible role for proxy server configuration
+  company: Personal
 
   issue_tracker_url: http://example.com/issue/tracker
 

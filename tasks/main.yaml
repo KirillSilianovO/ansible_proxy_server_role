@@ -1,1 +1,40 @@
 ---
+
+- name: Directories exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ apps_root_dir }}"
+    - "{{ proxy_server_app_dir }}"
+
+- name: Proxy server config file created from template
+  ansible.builtin.template:
+    src: squid.conf.j2
+    dest: "{{ proxy_server_config_file }}"
+    mode: '0644'
+
+- name: Packages installed
+  ansible.builtin.package:
+    name:
+      - apache2-utils
+    state: present
+
+- name: Password file created
+  ansible.builtin.shell:
+    cmd: htpasswd -b -c {{ proxy_server_pass_file }} {{ proxy_server_credentials.username }} {{ proxy_server_credentials.password }}
+
+- name: Application container started
+  community.docker.docker_container:
+    image: "{{ proxy_server_image }}"
+    pull: true
+    name: proxy_server
+    restart_policy: unless-stopped
+    detach: true
+    restart: true
+    state: started
+    ports:
+      - "{{ proxy_server_expose_port }}:3128/tcp"
+    volumes:
+      - "{{ proxy_server_config_file }}:/etc/squid/squid.conf"
+      - "{{ proxy_server_pass_file }}:/etc/squid/passwd"

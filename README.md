@@ -1,31 +1,41 @@
-Example role for Ansible role template
+Ansible Role for proxy server
 =========
 
-A brief description of the role goes here.
+Ansible role for installing and configuring a proxy server, based on Squid.
 
 Requirements
 ------------
-
+- Docker installed and configured
 
 Role Variables
 --------------
-
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- `apps_root_dir` - Root directory for the applications. Default is `/opt/apps`
+- `proxy_server_version` - Version of the proxy server image to install. Default is `latest`
+- `proxy_server_port` - Port for the proxy server to listen on. Default is `8080`
+- `proxy_server_credentials` - List of credentials for the proxy server. Default is `user:changeme`. Example:
+```yaml
+proxy_server_credentials:
+    username: user
+    password: changeme
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- community.docker
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
+```yaml
+- hosts: servers
+  roles:
+     - role: proxy-server
+       vars:
+         proxy_server_port: 8080
+         proxy_server_credentials:
+           - username: user
+             password: changeme
+```
 License
 -------
 
